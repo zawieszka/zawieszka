@@ -1,9 +1,46 @@
-[gd_scene format=3 uid="uid://uigo0bp06ij2"]
+[gd_scene load_steps=2 format=3 uid="uid://uigo0bp06ij2"]
 
-[node name="ClientMenu" type="Control"]
+[ext_resource type="Script" path="res://Connection/ClientController.cs" id="1_re8h7"]
+
+[node name="ClientMenu" type="Control" node_paths=PackedStringArray("Log")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_re8h7")
+Log = NodePath("LogEdit")
+
+[node name="ConnectServer" type="Button" parent="."]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 18.0
+offset_right = 416.0
+offset_bottom = 115.0
+text = "Connect"
+
+[node name="SendMessage" type="Button" parent="."]
+offset_left = 47.0
+offset_top = 152.0
+offset_right = 414.0
+offset_bottom = 249.0
+text = "Send message"
+
+[node name="LogEdit" type="TextEdit" parent="."]
+layout_mode = 0
+offset_left = 763.0
+offset_right = 1147.0
+offset_bottom = 609.0
+editable = false
+context_menu_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+use_default_word_separators = false
+
+[connection signal="button_down" from="ConnectServer" to="." method="_on_connect_server_button_down"]
+[connection signal="button_down" from="SendMessage" to="." method="_on_send_message_button_down"]

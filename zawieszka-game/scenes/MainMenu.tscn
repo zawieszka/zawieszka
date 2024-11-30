@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://gvttnmc28goc"]
+[gd_scene load_steps=2 format=3 uid="uid://gvttnmc28goc"]
+
+[ext_resource type="Script" path="res://MainMenu.cs" id="1_n63rp"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -7,3 +9,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_n63rp")
+
+[node name="Server" type="Button" parent="."]
+layout_mode = 0
+offset_left = 62.0
+offset_top = 254.0
+offset_right = 365.0
+offset_bottom = 360.0
+text = "Server"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 269.0
+offset_right = 836.0
+offset_bottom = 350.0
+text = "Client"
+
+[connection signal="button_down" from="Server" to="." method="_on_server_button_down"]
+[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]

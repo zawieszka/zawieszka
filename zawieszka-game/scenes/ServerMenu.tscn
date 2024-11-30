@@ -1,9 +1,38 @@
-[gd_scene format=3 uid="uid://bg7l2kr2k7rhn"]
+[gd_scene load_steps=2 format=3 uid="uid://bg7l2kr2k7rhn"]
 
-[node name="ServerMenu" type="Control"]
+[ext_resource type="Script" path="res://Connection/ServerController.cs" id="1_c2o3m"]
+
+[node name="ServerMenu" type="Control" node_paths=PackedStringArray("Log")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_c2o3m")
+Log = NodePath("LogEdit")
+
+[node name="StartServer" type="Button" parent="."]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 23.0
+offset_right = 335.0
+offset_bottom = 160.0
+text = "Start Server"
+
+[node name="LogEdit" type="TextEdit" parent="."]
+layout_mode = 0
+offset_left = 805.0
+offset_right = 1147.0
+offset_bottom = 485.0
+editable = false
+context_menu_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+use_default_word_separators = false
+
+[connection signal="button_down" from="StartServer" to="." method="_on_start_server_button_down"]
