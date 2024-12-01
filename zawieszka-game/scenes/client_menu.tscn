@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://d373j7a2rkh1l"]
+
+[node name="ServerMenu" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 120
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 120
+theme_override_constants/margin_bottom = 80
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="Buttons" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Connect" type="Button" parent="HBoxContainer/Buttons"]
+layout_mode = 2
+text = "Connect"
+
+[node name="Disconnect" type="Button" parent="HBoxContainer/Buttons"]
+layout_mode = 2
+text = "Disconnect"
+
+[node name="SendMessage" type="Button" parent="HBoxContainer/Buttons"]
+layout_mode = 2
+text = "Send Message"
+
+[node name="Text" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MessageBox" type="TextEdit" parent="HBoxContainer/Text"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 17
+placeholder_text = "Write your message here"
+
+[node name="ServerLog" type="TextEdit" parent="HBoxContainer/Text"]
+layout_mode = 2
+size_flags_vertical = 3
