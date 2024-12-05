@@ -47,12 +47,12 @@ public partial class ClientController : Node
     public void _on_send_message_button_down()
     {
         var id = Multiplayer.GetMultiplayerPeer().GetUniqueId();
-        Rpc(MethodName.KokMessage, id, "spoget");
+        RpcId(1, MethodName.GetCustomMessage, id, "spoget");
     }
 
     private void OnPlayerConnected(long id)
     {
-        Log.Text += $"Client: player {id} connected";
+        Log.Text += $"Client: player {id} connected\n";
         EmitSignal(SignalName.PlayerConnected, id);
     }
 
@@ -96,16 +96,16 @@ public partial class ClientController : Node
         Multiplayer.MultiplayerPeer = peer;
     }
     
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+    [Rpc(CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
     private void GetCustomMessage(int id, string message)
     {
-        Log.Text += $"Client: got {message} from {id}";
+        Log.Text += $"Client: got {message} from {id}\n";
         EmitSignal(SignalName.CustomMessage, id, message);
     }
     
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
-    private void KokMessage(int id, string message)
+    private void KokMessage()
     {
-        Log.Text += $"Client: Kok {message} from {id}";
+        Log.Text += $"Client: KOk\n";
     }
 }

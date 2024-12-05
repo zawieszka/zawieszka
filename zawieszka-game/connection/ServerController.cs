@@ -43,23 +43,31 @@ public partial class ServerController : Node
 		}
 
 		Multiplayer.MultiplayerPeer = peer;
+		
+		Log.Text += "Server created successfully\n";
 	}
 	
 	private void OnPlayerConnected(long id)
 	{
 		
-		Log.Text += $"Server: player {id} connected";
+		Log.Text += $"Server: player {id} connected\n";
 	}
 
 	private void OnPlayerDisconnected(long id)
 	{
-		Log.Text += $"Serrver: player {id} connected";
+		Log.Text += $"Server: player {id} connected\n";
 	}
 	
-	[Rpc(CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void GetCustomMessage(int id, string message)
 	{
-		Log.Text += $"Server: got {message} from {id}";
-		Rpc(ClientController.MethodName.GetCustomMessage, id, message);
+		Log.Text += $"Server: got {message} from {id}\n";
+		Rpc(MethodName.GetCustomMessage, id, message);
+	}
+	
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void KokMessage()
+	{
+		Log.Text += $"Server Kok\n";
 	}
 }
