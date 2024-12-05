@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b2qtdf2qxed8h"]
 
-[ext_resource type="Script" path="res://scenes/main_menu/ChangeScene.cs" id="1_ewmnp"]
+[ext_resource type="Script" path="res://scenes/menu/main/ChangeScene.cs" id="1_ewmnp"]
 
 [node name="MainMenu" type="MarginContainer"]
 anchors_preset = 15

@@ -1,6 +1,8 @@
-[gd_scene format=3 uid="uid://d373j7a2rkh1l"]
+[gd_scene load_steps=2 format=3 uid="uid://d373j7a2rkh1l"]
 
-[node name="ServerMenu" type="MarginContainer"]
+[ext_resource type="Script" path="res://connection/ClientController.cs" id="1_hy3nr"]
+
+[node name="ClientMenu" type="MarginContainer" node_paths=PackedStringArray("Log")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -10,6 +12,8 @@ theme_override_constants/margin_left = 120
 theme_override_constants/margin_top = 80
 theme_override_constants/margin_right = 120
 theme_override_constants/margin_bottom = 80
+script = ExtResource("1_hy3nr")
+Log = NodePath("HBoxContainer/Text/ClientLog")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -34,12 +38,12 @@ text = "Send Message"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MessageBox" type="TextEdit" parent="HBoxContainer/Text"]
+[node name="Message" type="TextEdit" parent="HBoxContainer/Text"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 17
 placeholder_text = "Write your message here"
 
-[node name="ServerLog" type="TextEdit" parent="HBoxContainer/Text"]
+[node name="ClientLog" type="TextEdit" parent="HBoxContainer/Text"]
 layout_mode = 2
 size_flags_vertical = 3

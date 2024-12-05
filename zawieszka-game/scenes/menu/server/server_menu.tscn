@@ -1,6 +1,8 @@
-[gd_scene format=3 uid="uid://c2nctumg07hjh"]
+[gd_scene load_steps=2 format=3 uid="uid://c2nctumg07hjh"]
 
-[node name="ServerMenu" type="MarginContainer"]
+[ext_resource type="Script" path="res://connection/ServerController.cs" id="1_dt8bu"]
+
+[node name="ServerMenu" type="MarginContainer" node_paths=PackedStringArray("Log")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -10,6 +12,8 @@ theme_override_constants/margin_left = 120
 theme_override_constants/margin_top = 80
 theme_override_constants/margin_right = 120
 theme_override_constants/margin_bottom = 80
+script = ExtResource("1_dt8bu")
+Log = NodePath("HBoxContainer/ServerLog")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2

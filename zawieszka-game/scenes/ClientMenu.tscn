@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://uigo0bp06ij2"]
+[gd_scene load_steps=2 format=3 uid="uid://cb736dwcerk56"]
 
 [ext_resource type="Script" path="res://Connection/ClientController.cs" id="1_re8h7"]
 
@@ -21,6 +21,7 @@ offset_bottom = 115.0
 text = "Connect"
 
 [node name="SendMessage" type="Button" parent="."]
+layout_mode = 0
 offset_left = 47.0
 offset_top = 152.0
 offset_right = 414.0
