@@ -1,6 +1,12 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zawieszka", "Zawieszka.csproj", "{5429E7CE-3660-4427-AB77-D70CF7BAC945}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zawieszka", "game\Zawieszka.csproj", "{5429E7CE-3660-4427-AB77-D70CF7BAC945}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "game", "game", "{20335C33-C449-4AA4-B833-330F6C4E323B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{4DD0C805-1112-4694-88F2-89C6D6805D09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZawieszkaCore", "core\ZawieszkaCore.csproj", "{0FEC4DE4-4551-446B-AB75-C8833957C26C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,5 +21,15 @@ Global
 		{5429E7CE-3660-4427-AB77-D70CF7BAC945}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
 		{5429E7CE-3660-4427-AB77-D70CF7BAC945}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
 		{5429E7CE-3660-4427-AB77-D70CF7BAC945}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{0FEC4DE4-4551-446B-AB75-C8833957C26C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FEC4DE4-4551-446B-AB75-C8833957C26C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FEC4DE4-4551-446B-AB75-C8833957C26C}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FEC4DE4-4551-446B-AB75-C8833957C26C}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{0FEC4DE4-4551-446B-AB75-C8833957C26C}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FEC4DE4-4551-446B-AB75-C8833957C26C}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5429E7CE-3660-4427-AB77-D70CF7BAC945} = {20335C33-C449-4AA4-B833-330F6C4E323B}
+		{0FEC4DE4-4551-446B-AB75-C8833957C26C} = {4DD0C805-1112-4694-88F2-89C6D6805D09}
 	EndGlobalSection
 EndGlobal

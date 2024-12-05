@@ -1,3 +1,5 @@
+using ZawieszkaCore;
+
 namespace Zawieszka.Connection;
 
 using Godot;
@@ -47,7 +49,7 @@ public partial class ClientController : Node
     public void _on_send_message_button_down()
     {
         var id = Multiplayer.GetMultiplayerPeer().GetUniqueId();
-        RpcId(1, MethodName.GetCustomMessage, id, "spoget");
+        RpcId(1, MethodName.GetCustomMessage, id, Test.TestMessage());
     }
 
     private void OnPlayerConnected(long id)
