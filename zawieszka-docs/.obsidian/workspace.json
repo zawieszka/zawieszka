@@ -85,7 +85,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 203.5
   },
   "right": {
     "id": "066ec36ff10ea0ed",
@@ -162,9 +162,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "884a27d3e8ac9df1",
+  "active": "bb3415872dd5c321",
   "lastOpenFiles": [
-    "2024-09-15.md",
-    "Game Design Document.md"
+    "Game Design Document.md",
+    "2024-09-15.md"
   ]
 }
