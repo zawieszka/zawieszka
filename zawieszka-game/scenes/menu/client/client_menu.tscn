@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://connection/ClientController.cs" id="1_hy3nr"]
 
-[node name="ClientMenu" type="MarginContainer" node_paths=PackedStringArray("Log")]
+[node name="Menu" type="MarginContainer" node_paths=PackedStringArray("Log")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -47,3 +47,6 @@ placeholder_text = "Write your message here"
 [node name="ClientLog" type="TextEdit" parent="HBoxContainer/Text"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[connection signal="button_down" from="HBoxContainer/Buttons/Connect" to="." method="_on_connect_server_button_down"]
+[connection signal="button_down" from="HBoxContainer/Buttons/SendMessage" to="." method="_on_send_message_button_down"]

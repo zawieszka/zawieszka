@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://connection/ServerController.cs" id="1_dt8bu"]
 
-[node name="ServerMenu" type="MarginContainer" node_paths=PackedStringArray("Log")]
+[node name="Menu" type="MarginContainer" node_paths=PackedStringArray("Log")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -33,3 +33,5 @@ text = "Turn Off"
 [node name="ServerLog" type="TextEdit" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/TurnOn" to="." method="_on_start_server_button_down"]

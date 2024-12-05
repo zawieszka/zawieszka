@@ -33,10 +33,10 @@ alignment = 1
 layout_mode = 2
 text = "Client"
 script = ExtResource("1_ewmnp")
-Path = "res://scenes/client_menu.tscn"
+Path = "res://scenes/menu/client/client_menu.tscn"
 
 [node name="ServerScene" type="Button" parent="CenterContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Server"
 script = ExtResource("1_ewmnp")
-Path = "res://scenes/server_menu.tscn"
+Path = "res://scenes/menu/server/server_menu.tscn"
