@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://d373j7a2rkh1l"]
+[gd_scene load_steps=3 format=3 uid="uid://d373j7a2rkh1l"]
 
 [ext_resource type="Script" path="res://connection/ClientController.cs" id="1_hy3nr"]
+[ext_resource type="Script" path="res://scenes/ChangeScene.cs" id="2_skaaf"]
 
 [node name="Menu" type="MarginContainer" node_paths=PackedStringArray("Log")]
 anchors_preset = 15
@@ -33,6 +34,12 @@ text = "Disconnect"
 [node name="SendMessage" type="Button" parent="HBoxContainer/Buttons"]
 layout_mode = 2
 text = "Send Message"
+
+[node name="Button" type="Button" parent="HBoxContainer/Buttons"]
+layout_mode = 2
+text = "Join Lobby"
+script = ExtResource("2_skaaf")
+Path = "res://scenes/lobby/Lobby.tscn"
 
 [node name="Text" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2

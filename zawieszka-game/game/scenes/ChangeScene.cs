@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Zawieszka;
+namespace Zawieszka.scenes;
 
 public partial class ChangeScene : Button
 {

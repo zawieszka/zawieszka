@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b2qtdf2qxed8h"]
 
-[ext_resource type="Script" path="res://scenes/menu/main/ChangeScene.cs" id="1_ewmnp"]
+[ext_resource type="Script" path="res://scenes/ChangeScene.cs" id="1_26dfa"]
 
 [node name="MainMenu" type="MarginContainer"]
 anchors_preset = 15
@@ -32,11 +32,11 @@ alignment = 1
 [node name="ClientScene" type="Button" parent="CenterContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Client"
-script = ExtResource("1_ewmnp")
+script = ExtResource("1_26dfa")
 Path = "res://scenes/menu/client/client_menu.tscn"
 
 [node name="ServerScene" type="Button" parent="CenterContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Server"
-script = ExtResource("1_ewmnp")
+script = ExtResource("1_26dfa")
 Path = "res://scenes/menu/server/server_menu.tscn"
