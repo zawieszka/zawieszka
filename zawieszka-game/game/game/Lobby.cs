@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ZawieszkaCore;
+﻿namespace ZawieszkaCore;
 
 public class Lobby
 {
