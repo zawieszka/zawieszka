@@ -6,9 +6,8 @@ using Godot;
 
 public partial class ClientController : Node
 {
-    [Export] 
-    private TextEdit Log { get; set; }
-    
+    [Export] private TextEdit Log { get; set; }
+
     [Signal]
     public delegate void PlayerConnectedEventHandler(long peerId);
 
@@ -17,7 +16,7 @@ public partial class ClientController : Node
 
     [Signal]
     public delegate void ServerDisconnectedEventHandler();
-    
+
     [Signal]
     public delegate void CustomMessageEventHandler(int peerId, string message);
 
@@ -33,7 +32,7 @@ public partial class ClientController : Node
     public override void _Process(double delta)
     {
     }
-    
+
     public void _on_connect_server_button_down()
     {
         /*if (Multiplayer.MultiplayerPeer is not null)
@@ -41,7 +40,7 @@ public partial class ClientController : Node
             Log.Text += "Already connected!\n";
             return;
         }*/
-        
+
         ConnectToServer();
     }
 
@@ -82,7 +81,7 @@ public partial class ClientController : Node
         Multiplayer.MultiplayerPeer = null;
         EmitSignal(SignalName.ServerDisconnected);
     }
-    
+
     private void ConnectToServer()
     {
         var peer = new ENetMultiplayerPeer();
@@ -93,17 +92,17 @@ public partial class ClientController : Node
             Log.Text += "Connecting to server unsuccessful\n";
             return;
         }
-        
+
         Multiplayer.MultiplayerPeer = peer;
     }
-    
+
     [Rpc(CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
     private void GetCustomMessage(int id, string message)
     {
         Log.Text += $"Client: got {message} from {id}\n";
         EmitSignal(SignalName.CustomMessage, id, message);
     }
-    
+
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
     private void KokMessage()
     {

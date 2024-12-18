@@ -17,7 +17,7 @@ public class Lobby
         {
             throw new ArgumentException("Player is already in a lobby");
         }
-        
+
         Players.Add(player);
         return true;
     }
@@ -33,7 +33,7 @@ public class Lobby
         {
             throw new SystemException("Insufficient player count");
         }
-        
+
         return new Game(Players);
     }
 }
