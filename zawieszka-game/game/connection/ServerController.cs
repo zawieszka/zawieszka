@@ -55,6 +55,9 @@ public partial class ServerController : Node
         Log.Text += $"Server: player {id} connected\n";
     }
 
+
+    #region Demo
+
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
     private void GetCustomMessage(int id, string message)
     {
@@ -63,8 +66,10 @@ public partial class ServerController : Node
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
-    private void KokMessage()
+    public void KokMessage()
     {
         Log.Text += $"Server Kok\n";
     }
+
+    #endregion
 }

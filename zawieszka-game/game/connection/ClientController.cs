@@ -96,6 +96,9 @@ public partial class ClientController : Node
         Multiplayer.MultiplayerPeer = peer;
     }
 
+
+    #region Demo
+
     [Rpc(CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
     private void GetCustomMessage(int id, string message)
     {
@@ -108,4 +111,6 @@ public partial class ClientController : Node
     {
         Log.Text += $"Client: KOk\n";
     }
+
+    #endregion
 }
