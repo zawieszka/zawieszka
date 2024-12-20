@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://d373j7a2rkh1l"]
 
-[ext_resource type="Script" path="res://scenes/menu/client/ClientMenu.cs" id="1_df1nr"]
+[ext_resource type="Script" path="res://scenes/ChangeScene.cs" id="2_skaaf"]
 
-[node name="ClientMenu" type="MarginContainer" node_paths=PackedStringArray("Username", "Log")]
+[node name="Menu" type="MarginContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,9 +12,6 @@ theme_override_constants/margin_left = 120
 theme_override_constants/margin_top = 80
 theme_override_constants/margin_right = 120
 theme_override_constants/margin_bottom = 80
-script = ExtResource("1_df1nr")
-Username = NodePath("HBoxContainer/Text/Username")
-Log = NodePath("HBoxContainer/Text/ClientLog")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -27,23 +24,30 @@ layout_mode = 2
 layout_mode = 2
 text = "Connect"
 
-[node name="SetUsername" type="Button" parent="HBoxContainer/Buttons"]
+[node name="Disconnect" type="Button" parent="HBoxContainer/Buttons"]
 layout_mode = 2
-text = "Set Username"
+text = "Disconnect"
+
+[node name="SendMessage" type="Button" parent="HBoxContainer/Buttons"]
+layout_mode = 2
+text = "Send Message"
+
+[node name="Button" type="Button" parent="HBoxContainer/Buttons"]
+layout_mode = 2
+text = "Join Lobby"
+script = ExtResource("2_skaaf")
+Path = "res://scenes/lobby/Lobby.tscn"
 
 [node name="Text" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Username" type="TextEdit" parent="HBoxContainer/Text"]
+[node name="Message" type="TextEdit" parent="HBoxContainer/Text"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 17
-placeholder_text = "Write your username here"
+placeholder_text = "Write your message here"
 
 [node name="ClientLog" type="TextEdit" parent="HBoxContainer/Text"]
 layout_mode = 2
 size_flags_vertical = 3
-
-[connection signal="button_up" from="HBoxContainer/Buttons/Connect" to="." method="_on_connect_button_up"]
-[connection signal="button_up" from="HBoxContainer/Buttons/SetUsername" to="." method="_on_set_username_button_up"]
