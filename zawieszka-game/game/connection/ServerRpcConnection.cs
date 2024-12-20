@@ -2,7 +2,7 @@ namespace Zawieszka.Connection;
 
 using Godot;
 
-public partial class ServerConnector : Node
+public partial class ServerRpcConnection : Node, IRpcConnection
 {
     [Export] private TextEdit Log { get; set; }
 
@@ -14,9 +14,7 @@ public partial class ServerConnector : Node
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-    {
-    }
+    public override void _Process(double delta) { }
 
     void _on_start_server_button_down()
     {
@@ -72,4 +70,19 @@ public partial class ServerConnector : Node
     }
 
     #endregion
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void Server_SetUsername(string username) { }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void Server_EndTurn() { }
+
+    [Rpc(MultiplayerApi.RpcMode.Disabled)]
+    public void Client_DisplayNotification(string message) { }
+
+    [Rpc(MultiplayerApi.RpcMode.Disabled)]
+    public void Client_DisplayMessage(string message) { }
+
+    [Rpc(MultiplayerApi.RpcMode.Disabled)]
+    public void Client_NextTurn(string username) { }
 }

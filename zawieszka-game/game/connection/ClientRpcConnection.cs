@@ -4,7 +4,7 @@ namespace Zawieszka.Connection;
 
 using Godot;
 
-public partial class ClientController : Node
+public partial class ClientRpcConnection : Node, IRpcConnection
 {
     [Export] private TextEdit Log { get; set; }
 
@@ -29,9 +29,7 @@ public partial class ClientController : Node
         Multiplayer.PeerDisconnected += OnPlayerDisconnected;
     }
 
-    public override void _Process(double delta)
-    {
-    }
+    public override void _Process(double delta) { }
 
     public void _on_connect_server_button_down()
     {
@@ -99,18 +97,33 @@ public partial class ClientController : Node
 
     #region Demo
 
-    [Rpc(CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+    [Rpc]
     private void GetCustomMessage(int id, string message)
     {
         Log.Text += $"Client: got {message} from {id}\n";
         EmitSignal(SignalName.CustomMessage, id, message);
     }
 
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+    [Rpc]
     private void KokMessage()
     {
         Log.Text += $"Client: KOk\n";
     }
 
     #endregion
+
+    [Rpc(MultiplayerApi.RpcMode.Disabled)]
+    public void Server_SetUsername(string username) { }
+
+    [Rpc(MultiplayerApi.RpcMode.Disabled)]
+    public void Server_EndTurn() { }
+
+    [Rpc]
+    public void Client_DisplayNotification(string message) { }
+
+    [Rpc]
+    public void Client_DisplayMessage(string message) { }
+
+    [Rpc]
+    public void Client_NextTurn(string username) { }
 }
