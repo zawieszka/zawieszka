@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c2nctumg07hjh"]
 
-[ext_resource type="Script" path="res://connection/ServerController.cs" id="1_dt8bu"]
+[ext_resource type="Script" path="res://connection/ServerRpcConnection.cs" id="1_dt8bu"]
 
 [node name="Menu" type="MarginContainer" node_paths=PackedStringArray("Log")]
 anchors_preset = 15

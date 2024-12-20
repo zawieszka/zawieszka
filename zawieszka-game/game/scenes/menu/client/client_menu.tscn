@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://d373j7a2rkh1l"]
 
-[ext_resource type="Script" path="res://connection/ClientController.cs" id="1_hy3nr"]
+[ext_resource type="Script" path="res://connection/ClientRpcConnection.cs" id="1_hy3nr"]
 [ext_resource type="Script" path="res://scenes/ChangeScene.cs" id="2_skaaf"]
 
 [node name="Menu" type="MarginContainer" node_paths=PackedStringArray("Log")]

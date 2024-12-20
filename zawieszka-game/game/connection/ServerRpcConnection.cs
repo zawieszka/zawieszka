@@ -2,7 +2,7 @@ namespace Zawieszka.Connection;
 
 using Godot;
 
-public partial class ServerController : Node
+public partial class ServerConnector : Node
 {
     [Export] private TextEdit Log { get; set; }
 
