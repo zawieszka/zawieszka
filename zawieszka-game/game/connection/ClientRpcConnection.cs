@@ -1,18 +1,11 @@
-using ZawieszkaCore;
-
 namespace Zawieszka.Connection;
 
 using Godot;
 
 public partial class ClientRpcConnection : Node, IRpcConnection
 {
-    [Export] private TextEdit Log { get; set; }
-
-    [Signal]
-    public delegate void PlayerConnectedEventHandler(long peerId);
-
-    [Signal]
-    public delegate void PlayerDisconnectedEventHandler(long peerId);
+    private const int ServerId = 1;
+    public bool ConnectedToServer { get; private set; } = false;
 
     [Signal]
     public delegate void ServerDisconnectedEventHandler();
@@ -20,98 +13,89 @@ public partial class ClientRpcConnection : Node, IRpcConnection
     [Signal]
     public delegate void CustomMessageEventHandler(int peerId, string message);
 
+    [Signal]
+    public delegate void DisplayNotificationEventHandler(string message);
+
+    [Signal]
+    public delegate void DisplayMessageEventHandler(string message);
+
+    [Signal]
+    public delegate void NextTurnEventHandler(string username);
+
     public override void _Ready()
     {
         Multiplayer.ConnectedToServer += OnConnectOk;
         Multiplayer.ConnectionFailed += OnConnectionFail;
         Multiplayer.ServerDisconnected += OnServerDisconnected;
-        Multiplayer.PeerConnected += OnPlayerConnected;
-        Multiplayer.PeerDisconnected += OnPlayerDisconnected;
     }
 
     public override void _Process(double delta) { }
 
-    public void _on_connect_server_button_down()
-    {
-        ConnectToServer();
-    }
-
-    public void _on_send_message_button_down()
-    {
-        var id = Multiplayer.GetMultiplayerPeer().GetUniqueId();
-        RpcId(1, MethodName.GetCustomMessage, id, Test.TestMessage());
-    }
-
-    private void OnPlayerConnected(long id)
-    {
-        Log.Text += $"Client: player {id} connected\n";
-        EmitSignal(SignalName.PlayerConnected, id);
-    }
-
-    private void OnPlayerDisconnected(long id)
-    {
-        Log.Text += $"Client: player {id} connected";
-        EmitSignal(SignalName.PlayerDisconnected, id);
-    }
-
     private void OnConnectOk()
     {
-        Log.Text += "Client: connected successfully\n";
-        var id = Multiplayer.GetUniqueId();
-        EmitSignal(SignalName.PlayerConnected, id);
+        ConnectedToServer = true;
     }
 
     private void OnConnectionFail()
     {
-        Log.Text += "Client: connection failure\n";
+        ConnectedToServer = false;
         Multiplayer.MultiplayerPeer = null;
     }
 
     private void OnServerDisconnected()
     {
-        Log.Text += "Client: server disconnected\n";
         Multiplayer.MultiplayerPeer = null;
+        ConnectedToServer = false;
         EmitSignal(SignalName.ServerDisconnected);
     }
 
-    private void ConnectToServer()
+    public void TryConnectToServer()
     {
+        if (ConnectedToServer)
+        {
+            GD.PrintErr("Client has already connected to a server");
+            return;
+        }
+        
         var peer = new ENetMultiplayerPeer();
         var error = peer.CreateClient(Globals.DefaultServerIp, Globals.Port);
 
         if (error != Error.Ok)
         {
-            Log.Text += "Connecting to server unsuccessful\n";
             return;
         }
 
+        ConnectedToServer = true;
         Multiplayer.MultiplayerPeer = peer;
     }
 
-
-    #region Demo
-
-    [Rpc]
-    private void GetCustomMessage(int id, string message)
+    [Rpc(MultiplayerApi.RpcMode.Disabled)]
+    public void Server_SetUsername(string username)
     {
-        Log.Text += $"Client: got {message} from {id}\n";
-        EmitSignal(SignalName.CustomMessage, id, message);
+        RpcId(ServerId, MethodName.Server_SetUsername, username);
     }
 
-    #endregion
-
     [Rpc(MultiplayerApi.RpcMode.Disabled)]
-    public void Server_SetUsername(string username) { }
-
-    [Rpc(MultiplayerApi.RpcMode.Disabled)]
-    public void Server_EndTurn() { }
-
-    [Rpc]
-    public void Client_DisplayNotification(string message) { }
+    public void Server_EndTurn()
+    {
+        RpcId(ServerId, MethodName.Server_EndTurn);
+    }
 
     [Rpc]
-    public void Client_DisplayMessage(string message) { }
+    public void Client_DisplayNotification(string message)
+    {
+        EmitSignal(SignalName.DisplayNotification, message);
+    }
 
     [Rpc]
-    public void Client_NextTurn(string username) { }
+    public void Client_DisplayMessage(string message)
+    {
+        EmitSignal(SignalName.DisplayMessage, message);
+    }
+
+    [Rpc]
+    public void Client_NextTurn(string username)
+    {
+        EmitSignal(SignalName.NextTurn, username);
+    }
 }

@@ -4,72 +4,79 @@ using Godot;
 
 public partial class ServerRpcConnection : Node, IRpcConnection
 {
-    [Export] private TextEdit Log { get; set; }
+    public bool ServerRunning { get; private set; } = false;
+    [Signal]
+    public delegate void EndTurnEventHandler(int id);
+
+    [Signal]
+    public delegate void SetUsernameEventHandler(int id, string username);
     
     public override void _Ready()
     {
         Multiplayer.PeerConnected += OnPlayerConnected;
         Multiplayer.PeerDisconnected += OnPlayerDisconnected;
     }
-    
+
     public override void _Process(double delta) { }
 
-    void _on_start_server_button_down()
+    public void StartServer()
     {
-
-        CreateGame();
-    }
-
-    private void CreateGame()
-    {
+        if (ServerRunning)
+        {
+            GD.PrintErr("Server has already started");
+            return;
+        }
         var peer = new ENetMultiplayerPeer();
         var error = peer.CreateServer(Globals.Port, Globals.MaxConnections);
 
         if (error != Error.Ok)
         {
-            Log.Text += "Server creation failure\n";
             return;
         }
 
+        ServerRunning = true;
         Multiplayer.MultiplayerPeer = peer;
-
-        Log.Text += "Server created successfully\n";
     }
 
     private void OnPlayerConnected(long id)
     {
-        Log.Text += $"Server: player {id} connected\n";
+        GD.Print($"Peer {id} connected");
     }
 
     private void OnPlayerDisconnected(long id)
     {
-        Log.Text += $"Server: player {id} connected\n";
+        GD.Print($"Peer {id} disconnected");
     }
 
-
-    #region Demo
-
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
-    private void GetCustomMessage(int id, string message)
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void Server_SetUsername(string username)
     {
-        Log.Text += $"Server: got {message} from {id}\n";
-        Rpc(MethodName.GetCustomMessage, id, message);
+        EmitSignal(SignalName.SetUsername, Multiplayer.GetRemoteSenderId(), username);
     }
 
-    #endregion
-
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void Server_SetUsername(string username) { }
+    public void Server_EndTurn()
+    {
+        EmitSignal(SignalName.EndTurn, Multiplayer.GetRemoteSenderId());
+    }
 
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    public void Server_EndTurn() { }
+    [Rpc(MultiplayerApi.RpcMode.Disabled, CallLocal = false)]
+    public void Client_DisplayNotification(string message)
+    {
+        Rpc(MethodName.Client_DisplayNotification, message);
+    }
 
-    [Rpc(MultiplayerApi.RpcMode.Disabled)]
-    public void Client_DisplayNotification(string message) { }
+    [Rpc(MultiplayerApi.RpcMode.Disabled, CallLocal = false)]
+    public void Client_DisplayMessage(string message)
+    {
+        Rpc(MethodName.Client_DisplayMessage, message);
+    }
 
-    [Rpc(MultiplayerApi.RpcMode.Disabled)]
-    public void Client_DisplayMessage(string message) { }
-
-    [Rpc(MultiplayerApi.RpcMode.Disabled)]
-    public void Client_NextTurn(string username) { }
+    [Rpc(MultiplayerApi.RpcMode.Disabled, CallLocal = false)]
+    public void Client_NextTurn(string username)
+    {
+        Rpc(MethodName.Client_NextTurn, username);
+    }
+    
+    
 }

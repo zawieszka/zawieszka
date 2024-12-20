@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b2qtdf2qxed8h"]
 
-[ext_resource type="Script" path="res://scenes/ChangeScene.cs" id="1_26dfa"]
+[ext_resource type="Script" path="res://scenes/menu/main/MainMenu.cs" id="1_nudfy"]
 
 [node name="MainMenu" type="MarginContainer"]
 anchors_preset = 15
@@ -12,6 +12,7 @@ theme_override_constants/margin_left = 120
 theme_override_constants/margin_top = 80
 theme_override_constants/margin_right = 120
 theme_override_constants/margin_bottom = 80
+script = ExtResource("1_nudfy")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 2
@@ -32,11 +33,10 @@ alignment = 1
 [node name="ClientScene" type="Button" parent="CenterContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Client"
-script = ExtResource("1_26dfa")
-Path = "res://scenes/menu/client/client_menu.tscn"
 
 [node name="ServerScene" type="Button" parent="CenterContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Server"
-script = ExtResource("1_26dfa")
-Path = "res://scenes/menu/server/server_menu.tscn"
+
+[connection signal="button_up" from="CenterContainer/VBoxContainer/VBoxContainer/ClientScene" to="." method="_on_client_scene_button_up"]
+[connection signal="button_up" from="CenterContainer/VBoxContainer/VBoxContainer/ServerScene" to="." method="_on_server_scene_button_up"]

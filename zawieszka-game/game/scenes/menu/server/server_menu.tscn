@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://c2nctumg07hjh"]
 
-[ext_resource type="Script" path="res://connection/ServerRpcConnection.cs" id="1_dt8bu"]
+[ext_resource type="Script" path="res://scenes/menu/server/ServerMenu.cs" id="1_n642i"]
 
-[node name="Menu" type="MarginContainer" node_paths=PackedStringArray("Log")]
+[node name="ServerMenu" type="MarginContainer" node_paths=PackedStringArray("Log")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,7 +12,7 @@ theme_override_constants/margin_left = 120
 theme_override_constants/margin_top = 80
 theme_override_constants/margin_right = 120
 theme_override_constants/margin_bottom = 80
-script = ExtResource("1_dt8bu")
+script = ExtResource("1_n642i")
 Log = NodePath("HBoxContainer/ServerLog")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -26,12 +26,8 @@ layout_mode = 2
 layout_mode = 2
 text = "Turn On"
 
-[node name="TurnOff" type="Button" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "Turn Off"
-
 [node name="ServerLog" type="TextEdit" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[connection signal="button_down" from="HBoxContainer/VBoxContainer/TurnOn" to="." method="_on_start_server_button_down"]
+[connection signal="button_up" from="HBoxContainer/VBoxContainer/TurnOn" to="." method="_on_turn_on_button_up"]
