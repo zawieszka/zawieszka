@@ -56,12 +56,6 @@ public partial class ServerRpcConnection : Node, IRpcConnection
         Rpc(MethodName.GetCustomMessage, id, message);
     }
 
-    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
-    public void KokMessage()
-    {
-        Log.Text += $"Server Kok\n";
-    }
-
     #endregion
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]

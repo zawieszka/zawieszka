@@ -98,12 +98,6 @@ public partial class ClientRpcConnection : Node, IRpcConnection
         EmitSignal(SignalName.CustomMessage, id, message);
     }
 
-    [Rpc]
-    private void KokMessage()
-    {
-        Log.Text += $"Client: KOk\n";
-    }
-
     #endregion
 
     [Rpc(MultiplayerApi.RpcMode.Disabled)]
