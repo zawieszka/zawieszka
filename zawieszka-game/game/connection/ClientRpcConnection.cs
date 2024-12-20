@@ -33,12 +33,6 @@ public partial class ClientRpcConnection : Node, IRpcConnection
 
     public void _on_connect_server_button_down()
     {
-        /*if (Multiplayer.MultiplayerPeer is not null)
-        {
-            Log.Text += "Already connected!\n";
-            return;
-        }*/
-
         ConnectToServer();
     }
 

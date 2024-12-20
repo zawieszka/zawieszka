@@ -5,24 +5,17 @@ using Godot;
 public partial class ServerRpcConnection : Node, IRpcConnection
 {
     [Export] private TextEdit Log { get; set; }
-
-    // Called when the node enters the scene tree for the first time.
+    
     public override void _Ready()
     {
         Multiplayer.PeerConnected += OnPlayerConnected;
         Multiplayer.PeerDisconnected += OnPlayerDisconnected;
     }
-
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    
     public override void _Process(double delta) { }
 
     void _on_start_server_button_down()
     {
-        /*if (Multiplayer.MultiplayerPeer is not null)
-        {
-            Log.Text += "Server already started\n";
-            return;
-        }*/
 
         CreateGame();
     }
