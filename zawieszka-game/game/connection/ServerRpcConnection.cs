@@ -5,12 +5,19 @@ using Godot;
 public partial class ServerRpcConnection : Node, IRpcConnection
 {
     public bool ServerRunning { get; private set; } = false;
-    [Signal]
-    public delegate void EndTurnEventHandler(int id);
 
     [Signal]
-    public delegate void SetUsernameEventHandler(int id, string username);
-    
+    public delegate void EndTurnEventHandler(int peerId);
+
+    [Signal]
+    public delegate void SetUsernameEventHandler(int peerId, string username);
+
+    [Signal]
+    public delegate void PlayerConnectedEventHandler(int peerId);
+
+    [Signal]
+    public delegate void PlayerDisconnectedEventHandler(int peerId);
+
     public override void _Ready()
     {
         Multiplayer.PeerConnected += OnPlayerConnected;
@@ -26,6 +33,7 @@ public partial class ServerRpcConnection : Node, IRpcConnection
             GD.PrintErr("Server has already started");
             return;
         }
+
         var peer = new ENetMultiplayerPeer();
         var error = peer.CreateServer(Globals.Port, Globals.MaxConnections);
 
@@ -41,11 +49,13 @@ public partial class ServerRpcConnection : Node, IRpcConnection
     private void OnPlayerConnected(long id)
     {
         GD.Print($"Peer {id} connected");
+        EmitSignal(SignalName.PlayerConnected, id);
     }
 
     private void OnPlayerDisconnected(long id)
     {
         GD.Print($"Peer {id} disconnected");
+        EmitSignal(SignalName.PlayerDisconnected, id);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
@@ -77,6 +87,4 @@ public partial class ServerRpcConnection : Node, IRpcConnection
     {
         Rpc(MethodName.Client_NextTurn, username);
     }
-    
-    
 }

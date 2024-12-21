@@ -26,8 +26,13 @@ layout_mode = 2
 layout_mode = 2
 text = "Turn On"
 
+[node name="DisplayLobby" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Display Lobby"
+
 [node name="ServerLog" type="TextEdit" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [connection signal="button_up" from="HBoxContainer/VBoxContainer/TurnOn" to="." method="_on_turn_on_button_up"]
+[connection signal="button_up" from="HBoxContainer/VBoxContainer/DisplayLobby" to="." method="_on_display_lobby_button_up"]
