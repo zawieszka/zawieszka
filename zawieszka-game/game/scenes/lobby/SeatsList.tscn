@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://ylwm13emsnin"]
+
+[ext_resource type="Script" path="res://scenes/lobby/SeatsList.cs" id="1_gq2ht"]
+[ext_resource type="PackedScene" uid="uid://c0txy5rns4eog" path="res://scenes/lobby/Seat.tscn" id="2_ughx4"]
+
+[node name="SeatsList" type="ScrollContainer"]
+custom_minimum_size = Vector2(524, 0)
+offset_right = 524.0
+offset_bottom = 648.0
+script = ExtResource("1_gq2ht")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Seat0" parent="VBoxContainer" instance=ExtResource("2_ughx4")]
+layout_mode = 2
+
+[node name="Seat1" parent="VBoxContainer" instance=ExtResource("2_ughx4")]
+layout_mode = 2
+SeatNumber = 1
+
+[node name="Seat2" parent="VBoxContainer" instance=ExtResource("2_ughx4")]
+layout_mode = 2
+SeatNumber = 2
+
+[node name="Seat3" parent="VBoxContainer" instance=ExtResource("2_ughx4")]
+layout_mode = 2
+SeatNumber = 3
+
+[node name="Seat4" parent="VBoxContainer" instance=ExtResource("2_ughx4")]
+layout_mode = 2
+SeatNumber = 4
+
+[node name="Seat5" parent="VBoxContainer" instance=ExtResource("2_ughx4")]
+layout_mode = 2
+SeatNumber = 5

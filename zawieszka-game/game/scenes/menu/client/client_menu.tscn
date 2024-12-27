@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://d373j7a2rkh1l"]
+[gd_scene load_steps=3 format=3 uid="uid://d373j7a2rkh1l"]
 
 [ext_resource type="Script" path="res://scenes/menu/client/ClientMenu.cs" id="1_df1nr"]
+[ext_resource type="PackedScene" uid="uid://ylwm13emsnin" path="res://scenes/lobby/SeatsList.tscn" id="2_f500k"]
 
 [node name="ClientMenu" type="MarginContainer" node_paths=PackedStringArray("Username", "Log")]
 anchors_preset = 15
@@ -8,10 +9,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 120
-theme_override_constants/margin_top = 80
-theme_override_constants/margin_right = 120
-theme_override_constants/margin_bottom = 80
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 script = ExtResource("1_df1nr")
 Username = NodePath("HBoxContainer/Text/Username")
 Log = NodePath("HBoxContainer/Text/ClientLog")
@@ -44,6 +45,9 @@ placeholder_text = "Write your username here"
 [node name="ClientLog" type="TextEdit" parent="HBoxContainer/Text"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="SeatsList" parent="HBoxContainer" instance=ExtResource("2_f500k")]
+layout_mode = 2
 
 [connection signal="button_up" from="HBoxContainer/Buttons/Connect" to="." method="_on_connect_button_up"]
 [connection signal="button_up" from="HBoxContainer/Buttons/SetUsername" to="." method="_on_set_username_button_up"]
