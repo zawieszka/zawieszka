@@ -3,44 +3,44 @@
 public class Lobby
 {
     public static int MAX_PLAYERS = 6;
-    public static int MIN_PLAYERS = 2;
     public List<User> Users { get; } = new(6);
 
-    public bool PutUser(int peerId, string username)
+    public Lobby()
     {
-        if (Users.Any(u => u.Username == username))
+        for (var i = 0; i < MAX_PLAYERS; i++)
+        {
+            Users.Add(null);
+        }
+    }
+
+    public bool TakeSeat(int seat, User user)
+    {
+        var seatedUser = Users[seat];
+        if (seatedUser == null)
+        {
+            EmptySeat(user.PeerId);
+            Users[seat] = user;
+            return true;
+        }
+
+        if (seatedUser.PeerId != user.PeerId)
         {
             return false;
         }
         
-        var user = Users.FirstOrDefault(u => u.PeerId == peerId);
-        if (user is not null)
-        {
-            user.Username = username;
-            return true;
-        }
-
-        if (Users.Count > MAX_PLAYERS)
+        Users[seat] = user;
+        return true;
+    }
+    
+    public bool EmptySeat(int peerId)
+    {
+        var user = Users.FirstOrDefault(u => u is not null && u.PeerId == peerId);
+        if (user is null)
         {
             return false;
         }
 
-        Users.Add(new User { PeerId = peerId, Username = username });
+        Users[Users.IndexOf(user)] = null;
         return true;
     }
-
-    public bool RemoveUser(int peerId)
-    {
-        return Users.Remove(Users.FirstOrDefault(u => u.PeerId == peerId));
-    }
-
-    /*public StartGame()
-    {
-        if (Players.Count < MIN_PLAYERS)
-        {
-            throw new SystemException("Insufficient player count");
-        }
-
-        return new User(Players);
-    }*/
 }
