@@ -15,9 +15,9 @@ public partial class ServerMenu : Node
     public override void _Ready()
     {
         Connection = GetNode<ServerRpcConnection>("/root/RpcConnection");
-        Connection.ConnectionRegistered += (id, username) => Log.Text = $"Peer{id}:{username} registered";
-        Connection.TakeSeat += OnTakeSeat;
-        Connection.PlayerDisconnected += OnPlayerDisconnected;
+        Connection.ConnectionRegistered += (id, username) => Log.Text += $"Peer{id}:{username} registered\n";
+        Connection.TakeSeatRequested += OnTakeSeat;
+        Connection.PeerDisconnected += OnPeerDisconnected;
         Connection.PeerConnected +=
             peerId => Connection.Client_UpdateLobby(peerId, JsonSerializer.Serialize(Lobby.Users));
     }
@@ -58,7 +58,7 @@ public partial class ServerMenu : Node
         }
     }
 
-    public void OnPlayerDisconnected(int peerId)
+    public void OnPeerDisconnected(int peerId)
     {
         if (Lobby.EmptySeat(peerId))
         {

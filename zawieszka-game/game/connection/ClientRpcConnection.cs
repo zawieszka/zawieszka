@@ -9,7 +9,7 @@ using Godot;
 public partial class ClientRpcConnection : Node, IRpcConnection
 {
     private const int ServerId = 1;
-    public bool ConnectedToServer => State == ConnectionState.Registered;
+    public bool ConnectedToServer => State == ConnectionState.Connected;
     private ConnectionState State { get; set; } = ConnectionState.NotConnected;
 
     [Signal]
@@ -21,33 +21,33 @@ public partial class ClientRpcConnection : Node, IRpcConnection
     public delegate void CustomMessageEventHandler(int peerId, string message);
 
     [Signal]
-    public delegate void DisplayNotificationEventHandler(string message);
+    public delegate void NewNotificationEventHandler(string message);
 
     [Signal]
-    public delegate void DisplayMessageEventHandler(string message);
+    public delegate void NewMessageEventHandler(string message);
 
     [Signal]
     public delegate void NextTurnEventHandler(string username);
     
     [Signal]
-    public delegate void UpdateLobbyEventHandler(string lobby);
+    public delegate void LobbyUpdatedEventHandler(string lobby);
 
     public override void _Ready()
     {
-        Multiplayer.ConnectedToServer += OnConnectOk;
-        Multiplayer.ConnectionFailed += OnConnectionFail;
+        Multiplayer.ConnectedToServer += OnConnected;
+        Multiplayer.ConnectionFailed += OnConnectionFailed;
         Multiplayer.ServerDisconnected += OnServerDisconnected;
     }
 
     public override void _Process(double delta) { }
 
-    private void OnConnectOk()
+    private void OnConnected()
     {
-        State = ConnectionState.Connected;
+        State = ConnectionState.PeerConnected;
         Server_RegisterConnection(SettingsManager.Instance.Settings.Username);
     }
 
-    private void OnConnectionFail()
+    private void OnConnectionFailed()
     {
         State = ConnectionState.NotConnected;
         Multiplayer.MultiplayerPeer = null;
@@ -74,14 +74,14 @@ public partial class ClientRpcConnection : Node, IRpcConnection
                     return;
                 }
 
-                State = ConnectionState.Connected;
+                State = ConnectionState.PeerConnected;
                 Multiplayer.MultiplayerPeer = peer;
                 return;
-            case ConnectionState.Connected:
+            case ConnectionState.PeerConnected:
                 Server_RegisterConnection(SettingsManager.Instance.Settings.Username);
                 return;
-            case ConnectionState.Registered:
-                GD.PrintErr("Client has already connected to a server");
+            case ConnectionState.Connected:
+                GD.PrintErr("Client is already connected to the server");
                 return;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -111,7 +111,7 @@ public partial class ClientRpcConnection : Node, IRpcConnection
     {
         if (peerId == Multiplayer.MultiplayerPeer.GetUniqueId())
         {
-            State = ConnectionState.Registered;
+            State = ConnectionState.Connected;
             EmitSignal(SignalName.ServerConnected, username, true);
         }
         else
@@ -123,20 +123,19 @@ public partial class ClientRpcConnection : Node, IRpcConnection
     [Rpc]
     public void Client_UpdateLobby(string lobby)
     {
-        GD.Print("Update lobby");
-        EmitSignal(SignalName.UpdateLobby, lobby);
+        EmitSignal(SignalName.LobbyUpdated, lobby);
     }
 
     [Rpc]
     public void Client_DisplayNotification(string message)
     {
-        EmitSignal(SignalName.DisplayNotification, message);
+        EmitSignal(SignalName.NewNotification, message);
     }
 
     [Rpc]
     public void Client_DisplayMessage(string message)
     {
-        EmitSignal(SignalName.DisplayMessage, message);
+        EmitSignal(SignalName.NewMessage, message);
     }
 
     [Rpc]
@@ -148,7 +147,7 @@ public partial class ClientRpcConnection : Node, IRpcConnection
     private enum ConnectionState
     {
         NotConnected,
-        Connected,
-        Registered
+        PeerConnected,
+        Connected
     }
 }

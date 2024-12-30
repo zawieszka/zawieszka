@@ -6,26 +6,23 @@ public partial class ServerRpcConnection : Node, IRpcConnection
 {
     public bool ServerRunning { get; private set; } = false;
     private Dictionary<int, string> RegisteredUsers { get; } = new();
-
-    [Signal]
-    public delegate void EndTurnEventHandler(int peerId);
-
-    [Signal]
-    public delegate void ConnectionRegisteredEventHandler(int peerId, string username);
-
+    
     [Signal]
     public delegate void PeerConnectedEventHandler(int peerId);
 
     [Signal]
-    public delegate void PlayerDisconnectedEventHandler(int peerId);
-    
+    public delegate void PeerDisconnectedEventHandler(int peerId);
     [Signal]
-    public delegate void TakeSeatEventHandler(int seat, int peerId, string username);
+    public delegate void ConnectionRegisteredEventHandler(int peerId, string username);
+    [Signal]
+    public delegate void EndTurnRequestedEventHandler(int peerId);
+    [Signal]
+    public delegate void TakeSeatRequestedEventHandler(int seat, int peerId, string username);
 
     public override void _Ready()
     {
         Multiplayer.PeerConnected += OnPeerConnected;
-        Multiplayer.PeerDisconnected += OnPlayerDisconnected;
+        Multiplayer.PeerDisconnected += OnPeerDisconnected;
     }
 
     public override void _Process(double delta) { }
@@ -53,7 +50,7 @@ public partial class ServerRpcConnection : Node, IRpcConnection
     private void OnPeerConnected(long id)
     {
         // https://github.com/godotengine/godot/issues/75396
-        if (id > int.MaxValue)
+        if (Math.Abs(id) > int.MaxValue)
         {
             GD.PrintErr("PeerID was trimmed!!!");
         }
@@ -61,11 +58,11 @@ public partial class ServerRpcConnection : Node, IRpcConnection
         EmitSignal(SignalName.PeerConnected, (int)id);
     }
 
-    private void OnPlayerDisconnected(long id)
+    private void OnPeerDisconnected(long id)
     {
         GD.Print($"Peer {(int)id} disconnected");
         RegisteredUsers.Remove((int)id);
-        EmitSignal(SignalName.PlayerDisconnected, (int)id);
+        EmitSignal(SignalName.PeerDisconnected, (int)id);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
@@ -84,7 +81,7 @@ public partial class ServerRpcConnection : Node, IRpcConnection
         var peerId = Multiplayer.GetRemoteSenderId();
         if (RegisteredUsers.TryGetValue(peerId, out var username))
         {
-            EmitSignal(SignalName.TakeSeat, seat, peerId, username);
+            EmitSignal(SignalName.TakeSeatRequested, seat, peerId, username);
         }
         else
         {
@@ -95,7 +92,7 @@ public partial class ServerRpcConnection : Node, IRpcConnection
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
     public void Server_EndTurn()
     {
-        EmitSignal(SignalName.EndTurn, Multiplayer.GetRemoteSenderId());
+        EmitSignal(SignalName.EndTurnRequested, Multiplayer.GetRemoteSenderId());
     }
 
     [Rpc(MultiplayerApi.RpcMode.Disabled, CallLocal = false)]

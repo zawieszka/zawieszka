@@ -4,11 +4,11 @@ using Zawieszka.Connection;
 using Zawieszka.Scenes.Lobby;
 using Zawieszka.Server;
 
-namespace Zawieszka.scenes.menu.client;
+namespace Zawieszka.Scenes.Menu.Client;
 
 public partial class ClientMenu : Node
 {
-    [Export] TextEdit Log { get; set; }
+    [Export] private TextEdit Log { get; set; }
     [Export] private SeatsList Seats { get; set; } 
     [Export] private Control LoadingPanel {get;set;}
     [Export] private Control LobbyPanel {get;set;}
@@ -19,8 +19,8 @@ public partial class ClientMenu : Node
         LobbyPanel.Hide();
         
         Connection = GetNode<ClientRpcConnection>("/root/RpcConnection");
-        Connection.DisplayMessage += OnDisplayMessage;
-        Connection.DisplayNotification += OnNotifyMessage;
+        Connection.NewMessage += OnDisplayMessage;
+        Connection.NewNotification += OnNotifyMessage;
         Connection.ServerDisconnected += () =>
         {
             LoadingPanel.Show();
@@ -39,7 +39,7 @@ public partial class ClientMenu : Node
             }
         };
         
-        Connection.UpdateLobby += OnUpdateLobby;
+        Connection.LobbyUpdated += OnUpdateLobby;
 
         Seats.RequestTakeSeat += seat => Connection.Server_TakeSeat(seat);
         
@@ -54,7 +54,7 @@ public partial class ClientMenu : Node
     private void OnUpdateLobby(string lobby)
     {
         var users = JsonSerializer.Deserialize<List<User>>(lobby);
-        for (var i = 0; i < 6; i++)
+        for (var i = 0; i < Server.Lobby.MaxPlayers; i++)
         {
             Seats.SetSeat(i, users[i] != null ? users[i].Username : null);
         }

@@ -5,13 +5,14 @@ namespace Zawieszka.Scenes.Lobby;
 [GlobalClass]
 public partial class Seat : Node
 {
-    private const string DefaultUsernameTxt = "Empty";
-    [Export] private Label UsernameDisplay{ get; set; }
+    private const string EmptySeatCaption = "Empty";
+    [Export] public int SeatNumber { get; private set; } = 0;
+    [Export] private Label UsernameDisplay { get; set; }
     [Export] private Label PlayerDisplay { get; set; }
     [Export] private Button SeatButton { get; set; }
+    
     [Signal]
-    public delegate void TakeSeatClickEventHandler(int seat);
-    [Export] public int SeatNumber { get; private set; } = 0;
+    public delegate void TakeSeatClickedEventHandler(int seat);
 
     public override void _Ready()
     {
@@ -28,11 +29,11 @@ public partial class Seat : Node
     public void EmptySeat()
     {
         SeatButton.Visible = true;
-        UsernameDisplay.Text = DefaultUsernameTxt;
+        UsernameDisplay.Text = EmptySeatCaption;
     }
 
     private void _on_seat_button_button_up()
     {
-        EmitSignal(SignalName.TakeSeatClick, SeatNumber);
+        EmitSignal(SignalName.TakeSeatClicked, SeatNumber);
     }
 }

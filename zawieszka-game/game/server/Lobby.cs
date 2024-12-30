@@ -2,12 +2,12 @@
 
 public class Lobby
 {
-    public static int MAX_PLAYERS = 6;
-    public List<User> Users { get; } = new(6);
+    public const int MaxPlayers = 6;
+    public List<User> Users { get; } = new(MaxPlayers);
 
     public Lobby()
     {
-        for (var i = 0; i < MAX_PLAYERS; i++)
+        for (var i = 0; i < MaxPlayers; i++)
         {
             Users.Add(null);
         }
