@@ -110,6 +110,11 @@ public partial class ServerRpcConnection : Node, IRpcConnection
         Rpc(MethodName.Client_UpdateLobby, lobby);
     }
 
+    public void Client_UpdateLobby(int peerId, string lobby)
+    {
+        RpcId(peerId, MethodName.Client_UpdateLobby, lobby);
+    }
+
     [Rpc(MultiplayerApi.RpcMode.Disabled, CallLocal = false)]
     public void Client_DisplayNotification(string message)
     {

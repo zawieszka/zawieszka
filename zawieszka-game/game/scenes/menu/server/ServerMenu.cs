@@ -9,15 +9,17 @@ public partial class ServerMenu : Node
 {
     [Export] TextEdit Log { get; set; }
     private ServerRpcConnection Connection { get; set; }
-    
-    private Lobby Lobby { get; } = new ();
-    
+
+    private Lobby Lobby { get; } = new();
+
     public override void _Ready()
     {
         Connection = GetNode<ServerRpcConnection>("/root/RpcConnection");
         Connection.ConnectionRegistered += (id, username) => Log.Text = $"Peer{id}:{username} registered";
         Connection.TakeSeat += OnTakeSeat;
         Connection.PlayerDisconnected += OnPlayerDisconnected;
+        Connection.PeerConnected +=
+            peerId => Connection.Client_UpdateLobby(peerId, JsonSerializer.Serialize(Lobby.Users));
     }
 
     public void _on_turn_on_button_up()
@@ -38,13 +40,12 @@ public partial class ServerMenu : Node
             {
                 Log.Text += $"Player {i} - Empty\n";
             }
-            
         }
     }
 
     public void OnTakeSeat(int seat, int peerId, string username)
     {
-        var success = Lobby.TakeSeat(seat, new User{PeerId = peerId, Username = username});
+        var success = Lobby.TakeSeat(seat, new User { PeerId = peerId, Username = username });
 
         if (success)
         {
@@ -56,7 +57,7 @@ public partial class ServerMenu : Node
             Connection.Client_DisplayMessage($"{username} failed to take a seat");
         }
     }
-    
+
     public void OnPlayerDisconnected(int peerId)
     {
         if (Lobby.EmptySeat(peerId))
@@ -65,5 +66,4 @@ public partial class ServerMenu : Node
             Connection.Client_UpdateLobby(JsonSerializer.Serialize(Lobby.Users));
         }
     }
-    
 }
