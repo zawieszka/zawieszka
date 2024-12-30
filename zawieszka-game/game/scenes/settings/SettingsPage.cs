@@ -4,7 +4,7 @@ namespace Zawieszka.Scenes.Settings;
 
 public partial class SettingsPage : Node
 {
-    [Export] private LineEdit UsernameDisplay { get; set; }
+    [Export] private LineEdit UsernameDisplay { get; set; } = null!;
 
     public override void _Ready()
     {

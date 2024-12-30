@@ -19,7 +19,7 @@ public partial class SeatsList : Node
         }
     }
 
-    public void SetSeat(int seatNumber, string username)
+    public void SetSeat(int seatNumber, string? username)
     {
         if (username is null)
         {

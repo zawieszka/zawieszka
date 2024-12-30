@@ -7,8 +7,8 @@ namespace Zawieszka.scenes.menu.server;
 
 public partial class ServerMenu : Node
 {
-    [Export] TextEdit Log { get; set; }
-    private ServerRpcConnection Connection { get; set; }
+    [Export] private TextEdit Log { get; set; } = null!;
+    private ServerRpcConnection Connection { get; set; } = null!;
 
     private Lobby Lobby { get; } = new();
 

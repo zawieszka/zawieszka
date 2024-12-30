@@ -8,11 +8,11 @@ namespace Zawieszka.Scenes.Menu.Client;
 
 public partial class ClientMenu : Node
 {
-    [Export] private TextEdit Log { get; set; }
-    [Export] private SeatsList Seats { get; set; } 
-    [Export] private Control LoadingPanel {get;set;}
-    [Export] private Control LobbyPanel {get;set;}
-    private ClientRpcConnection Connection { get; set; }
+    [Export] private TextEdit Log { get; set; } = null!;
+    [Export] private SeatsList Seats { get; set; } = null!;
+    [Export] private Control LoadingPanel {get;set;} = null!;
+    [Export] private Control LobbyPanel {get;set;} = null!;
+    private ClientRpcConnection Connection { get; set; } = null!;
     public override void _Ready()
     {
         LoadingPanel.Show();
@@ -53,10 +53,10 @@ public partial class ClientMenu : Node
 
     private void OnUpdateLobby(string lobby)
     {
-        var users = JsonSerializer.Deserialize<List<User>>(lobby);
+        var users = JsonSerializer.Deserialize<List<User?>>(lobby)!;
         for (var i = 0; i < Server.Lobby.MaxPlayers; i++)
         {
-            Seats.SetSeat(i, users[i] != null ? users[i].Username : null);
+            Seats.SetSeat(i, users[i]?.Username);
         }
     }
 

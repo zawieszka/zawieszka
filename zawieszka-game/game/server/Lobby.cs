@@ -3,7 +3,7 @@
 public class Lobby
 {
     public const int MaxPlayers = 6;
-    public List<User> Users { get; } = new(MaxPlayers);
+    public List<User?> Users { get; } = new(MaxPlayers);
 
     public Lobby()
     {

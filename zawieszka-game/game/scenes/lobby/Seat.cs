@@ -6,10 +6,10 @@ namespace Zawieszka.Scenes.Lobby;
 public partial class Seat : Node
 {
     private const string EmptySeatCaption = "Empty";
-    [Export] public int SeatNumber { get; private set; } = 0;
-    [Export] private Label UsernameDisplay { get; set; }
-    [Export] private Label PlayerDisplay { get; set; }
-    [Export] private Button SeatButton { get; set; }
+    [Export] public int SeatNumber { get; private set; }
+    [Export] private Label UsernameDisplay { get; set; } = null!;
+    [Export] private Label PlayerDisplay { get; set; } = null!;
+    [Export] private Button SeatButton { get; set; } = null!;
     
     [Signal]
     public delegate void TakeSeatClickedEventHandler(int seat);

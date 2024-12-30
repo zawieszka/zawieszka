@@ -5,8 +5,8 @@ using Zawieszka.Scenes.Settings;
 
 public partial class MainMenu : Node
 {
-	[Export] private Label HelloDisplay { get; set; }
-	[Export] private Button ClientButton { get; set; }
+	[Export] private Label HelloDisplay { get; set; } = null!;
+	[Export] private Button ClientButton { get; set; } = null!;
 	
 	private SettingsManager SettingsManager { get; set; } = SettingsManager.Instance;
 	public override void _Ready()

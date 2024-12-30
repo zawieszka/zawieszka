@@ -27,7 +27,7 @@ public class SettingsManager
             var username = saveFile.GetLine();
             Settings = new Settings() { Username = username };
         }
-        catch (Exception e)
+        catch (Exception)
         {
             GD.Print("Invalid Settings file");
         }
