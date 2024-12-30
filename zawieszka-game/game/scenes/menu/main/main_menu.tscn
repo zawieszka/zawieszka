@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/menu/main/MainMenu.cs" id="1_nudfy"]
 
-[node name="MainMenu" type="MarginContainer"]
+[node name="MainMenu" type="MarginContainer" node_paths=PackedStringArray("HelloDisplay", "ClientButton")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,6 +13,15 @@ theme_override_constants/margin_top = 80
 theme_override_constants/margin_right = 120
 theme_override_constants/margin_bottom = 80
 script = ExtResource("1_nudfy")
+HelloDisplay = NodePath("GridContainer/Label")
+ClientButton = NodePath("CenterContainer/VBoxContainer/VBoxContainer/ClientScene")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Set up your user profile in Settings before adventure!"
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 2
@@ -38,5 +47,10 @@ text = "Client"
 layout_mode = 2
 text = "Server"
 
+[node name="SettingsScene" type="Button" parent="CenterContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+
 [connection signal="button_up" from="CenterContainer/VBoxContainer/VBoxContainer/ClientScene" to="." method="_on_client_scene_button_up"]
 [connection signal="button_up" from="CenterContainer/VBoxContainer/VBoxContainer/ServerScene" to="." method="_on_server_scene_button_up"]
+[connection signal="button_up" from="CenterContainer/VBoxContainer/VBoxContainer/SettingsScene" to="." method="_on_settings_scene_button_up"]

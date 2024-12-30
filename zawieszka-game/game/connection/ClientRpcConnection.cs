@@ -1,3 +1,7 @@
+using System.Text.Json;
+using Zawieszka.Scenes.Settings;
+using Zawieszka.Server;
+
 namespace Zawieszka.Connection;
 
 using Godot;
@@ -5,74 +9,95 @@ using Godot;
 public partial class ClientRpcConnection : Node, IRpcConnection
 {
     private const int ServerId = 1;
-    public bool ConnectedToServer { get; private set; } = false;
+    public bool ConnectedToServer => State == ConnectionState.Connected;
+    private ConnectionState State { get; set; } = ConnectionState.NotConnected;
 
     [Signal]
     public delegate void ServerDisconnectedEventHandler();
+    [Signal]
+    public delegate void ServerConnectedEventHandler(string username, bool isMe);
 
     [Signal]
     public delegate void CustomMessageEventHandler(int peerId, string message);
 
     [Signal]
-    public delegate void DisplayNotificationEventHandler(string message);
+    public delegate void NewNotificationEventHandler(string message);
 
     [Signal]
-    public delegate void DisplayMessageEventHandler(string message);
+    public delegate void NewMessageEventHandler(string message);
 
     [Signal]
     public delegate void NextTurnEventHandler(string username);
+    
+    [Signal]
+    public delegate void LobbyUpdatedEventHandler(string lobby);
 
     public override void _Ready()
     {
-        Multiplayer.ConnectedToServer += OnConnectOk;
-        Multiplayer.ConnectionFailed += OnConnectionFail;
+        Multiplayer.ConnectedToServer += OnConnected;
+        Multiplayer.ConnectionFailed += OnConnectionFailed;
         Multiplayer.ServerDisconnected += OnServerDisconnected;
     }
 
     public override void _Process(double delta) { }
 
-    private void OnConnectOk()
+    private void OnConnected()
     {
-        ConnectedToServer = true;
+        State = ConnectionState.PeerConnected;
+        Server_RegisterConnection(SettingsManager.Instance.Settings.Username);
     }
 
-    private void OnConnectionFail()
+    private void OnConnectionFailed()
     {
-        ConnectedToServer = false;
+        State = ConnectionState.NotConnected;
         Multiplayer.MultiplayerPeer = null;
+        EmitSignal(SignalName.ServerDisconnected);
     }
 
     private void OnServerDisconnected()
     {
         Multiplayer.MultiplayerPeer = null;
-        ConnectedToServer = false;
+        State = ConnectionState.NotConnected;
         EmitSignal(SignalName.ServerDisconnected);
     }
 
     public void TryConnectToServer()
     {
-        if (ConnectedToServer)
+        switch (State)
         {
-            GD.PrintErr("Client has already connected to a server");
-            return;
-        }
-        
-        var peer = new ENetMultiplayerPeer();
-        var error = peer.CreateClient(Globals.DefaultServerIp, Globals.Port);
+            case ConnectionState.NotConnected:
+                var peer = new ENetMultiplayerPeer();
+                var error = peer.CreateClient(Globals.DefaultServerIp, Globals.Port);
 
-        if (error != Error.Ok)
-        {
-            return;
-        }
+                if (error != Error.Ok)
+                {
+                    return;
+                }
 
-        ConnectedToServer = true;
-        Multiplayer.MultiplayerPeer = peer;
+                State = ConnectionState.PeerConnected;
+                Multiplayer.MultiplayerPeer = peer;
+                return;
+            case ConnectionState.PeerConnected:
+                Server_RegisterConnection(SettingsManager.Instance.Settings.Username);
+                return;
+            case ConnectionState.Connected:
+                GD.PrintErr("Client is already connected to the server");
+                return;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     [Rpc(MultiplayerApi.RpcMode.Disabled)]
-    public void Server_SetUsername(string username)
+    public void Server_RegisterConnection(string username)
     {
-        RpcId(ServerId, MethodName.Server_SetUsername, username);
+        RpcId(ServerId, MethodName.Server_RegisterConnection, username);
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.Disabled)]
+    public void Server_TakeSeat(int seat)
+    {
+        RpcId(ServerId, MethodName.Server_TakeSeat, seat);
     }
 
     [Rpc(MultiplayerApi.RpcMode.Disabled)]
@@ -82,20 +107,47 @@ public partial class ClientRpcConnection : Node, IRpcConnection
     }
 
     [Rpc]
+    public void Client_RegisteredConnection(int peerId, string username)
+    {
+        if (peerId == Multiplayer.MultiplayerPeer.GetUniqueId())
+        {
+            State = ConnectionState.Connected;
+            EmitSignal(SignalName.ServerConnected, username, true);
+        }
+        else
+        {
+            EmitSignal(SignalName.ServerConnected, username, false);
+        }
+    }
+
+    [Rpc]
+    public void Client_UpdateLobby(string lobby)
+    {
+        EmitSignal(SignalName.LobbyUpdated, lobby);
+    }
+
+    [Rpc]
     public void Client_DisplayNotification(string message)
     {
-        EmitSignal(SignalName.DisplayNotification, message);
+        EmitSignal(SignalName.NewNotification, message);
     }
 
     [Rpc]
     public void Client_DisplayMessage(string message)
     {
-        EmitSignal(SignalName.DisplayMessage, message);
+        EmitSignal(SignalName.NewMessage, message);
     }
 
     [Rpc]
     public void Client_NextTurn(string username)
     {
         EmitSignal(SignalName.NextTurn, username);
+    }
+
+    private enum ConnectionState
+    {
+        NotConnected,
+        PeerConnected,
+        Connected
     }
 }

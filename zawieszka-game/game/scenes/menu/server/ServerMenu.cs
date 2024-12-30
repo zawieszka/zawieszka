@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System.Text.Json;
+using Godot;
 using Zawieszka.Connection;
 using Zawieszka.Server;
 
@@ -8,14 +9,17 @@ public partial class ServerMenu : Node
 {
     [Export] TextEdit Log { get; set; }
     private ServerRpcConnection Connection { get; set; }
-    
-    private Lobby Lobby { get; } = new ();
-    
+
+    private Lobby Lobby { get; } = new();
+
     public override void _Ready()
     {
         Connection = GetNode<ServerRpcConnection>("/root/RpcConnection");
-        Connection.SetUsername += OnSetUsername;
-        Connection.PlayerDisconnected += OnPlayerDisconnected;
+        Connection.ConnectionRegistered += (id, username) => Log.Text += $"Peer{id}:{username} registered\n";
+        Connection.TakeSeatRequested += OnTakeSeat;
+        Connection.PeerDisconnected += OnPeerDisconnected;
+        Connection.PeerConnected +=
+            peerId => Connection.Client_UpdateLobby(peerId, JsonSerializer.Serialize(Lobby.Users));
     }
 
     public void _on_turn_on_button_up()
@@ -26,34 +30,40 @@ public partial class ServerMenu : Node
     public void _on_display_lobby_button_up()
     {
         Log.Text += "Lobby:\n";
-        foreach (var user in Lobby.Users)
+        foreach (var (i, user) in Lobby.Users.Select((val, n) => (n, val)))
         {
-            Log.Text += $"{user.PeerId} - {user.Username}\n";
+            if (user is not null)
+            {
+                Log.Text += $"Player {i} - {user.PeerId} - {user.Username}\n";
+            }
+            else
+            {
+                Log.Text += $"Player {i} - Empty\n";
+            }
         }
     }
 
-    public void OnSetUsername(int peerId, string username)
+    public void OnTakeSeat(int seat, int peerId, string username)
     {
-        var success = Lobby.PutUser(peerId, username);
+        var success = Lobby.TakeSeat(seat, new User { PeerId = peerId, Username = username });
 
         if (success)
         {
             Log.Text += $"{peerId} is now {username}\n";
-            Connection.Client_DisplayMessage($"{username} connected to lobby");
+            Connection.Client_UpdateLobby(JsonSerializer.Serialize(Lobby.Users));
         }
         else
         {
-            Connection.Client_DisplayMessage($"{username} failed to connect to lobby");
+            Connection.Client_DisplayMessage($"{username} failed to take a seat");
         }
     }
-    
-    public void OnPlayerDisconnected(int peerId)
+
+    public void OnPeerDisconnected(int peerId)
     {
-        if (Lobby.RemoveUser(peerId))
+        if (Lobby.EmptySeat(peerId))
         {
             Log.Text += $"user {peerId} removed from lobby\n";
-            Connection.Client_DisplayMessage($"{peerId} removed from lobby");
+            Connection.Client_UpdateLobby(JsonSerializer.Serialize(Lobby.Users));
         }
     }
-    
 }
