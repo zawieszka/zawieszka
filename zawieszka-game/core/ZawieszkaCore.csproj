@@ -7,4 +7,12 @@
         <Authors>Mendrejk, Pralkopodobny</Authors>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Characters\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dunet" Version="1.11.2" />
+    </ItemGroup>
+
 </Project>
