@@ -2,6 +2,6 @@
 
 public class User
 {
-    public int PeerId { get; set; }
-    public string Username { get; set; }
+    public required int PeerId { get; set; }
+    public required string Username { get; set; }
 }

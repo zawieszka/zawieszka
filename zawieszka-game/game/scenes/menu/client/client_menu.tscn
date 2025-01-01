@@ -1,49 +1,51 @@
-[gd_scene load_steps=2 format=3 uid="uid://d373j7a2rkh1l"]
+[gd_scene load_steps=3 format=3 uid="uid://d373j7a2rkh1l"]
 
 [ext_resource type="Script" path="res://scenes/menu/client/ClientMenu.cs" id="1_df1nr"]
+[ext_resource type="PackedScene" uid="uid://ylwm13emsnin" path="res://scenes/lobby/SeatsList.tscn" id="2_f500k"]
 
-[node name="ClientMenu" type="MarginContainer" node_paths=PackedStringArray("Username", "Log")]
+[node name="ClientMenu" type="MarginContainer" node_paths=PackedStringArray("Log", "Seats", "LoadingPanel", "LobbyPanel")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 120
-theme_override_constants/margin_top = 80
-theme_override_constants/margin_right = 120
-theme_override_constants/margin_bottom = 80
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 script = ExtResource("1_df1nr")
-Username = NodePath("HBoxContainer/Text/Username")
-Log = NodePath("HBoxContainer/Text/ClientLog")
+Log = NodePath("Lobby/Text/ClientLog")
+Seats = NodePath("Lobby/SeatsList")
+LoadingPanel = NodePath("LoadingScreen")
+LobbyPanel = NodePath("Lobby")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="Lobby" type="HBoxContainer" parent="."]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="Buttons" type="VBoxContainer" parent="HBoxContainer"]
-layout_mode = 2
-
-[node name="Connect" type="Button" parent="HBoxContainer/Buttons"]
-layout_mode = 2
-text = "Connect"
-
-[node name="SetUsername" type="Button" parent="HBoxContainer/Buttons"]
-layout_mode = 2
-text = "Set Username"
-
-[node name="Text" type="VBoxContainer" parent="HBoxContainer"]
+[node name="Text" type="VBoxContainer" parent="Lobby"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Username" type="TextEdit" parent="HBoxContainer/Text"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 17
-placeholder_text = "Write your username here"
-
-[node name="ClientLog" type="TextEdit" parent="HBoxContainer/Text"]
+[node name="ClientLog" type="TextEdit" parent="Lobby/Text"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[connection signal="button_up" from="HBoxContainer/Buttons/Connect" to="." method="_on_connect_button_up"]
-[connection signal="button_up" from="HBoxContainer/Buttons/SetUsername" to="." method="_on_set_username_button_up"]
+[node name="SeatsList" parent="Lobby" instance=ExtResource("2_f500k")]
+layout_mode = 2
+
+[node name="LoadingScreen" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="Texture" type="ColorRect" parent="LoadingScreen"]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="LoadingScreen"]
+layout_mode = 2
+
+[node name="ConnectToLobby" type="Button" parent="LoadingScreen/CenterContainer"]
+layout_mode = 2
+text = "Reconnect to lobby"
+
+[connection signal="button_up" from="LoadingScreen/CenterContainer/ConnectToLobby" to="." method="_on_connect_to_lobby_button_up"]
