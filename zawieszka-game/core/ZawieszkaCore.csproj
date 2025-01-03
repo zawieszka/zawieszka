@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Authors>Mendrejk, Pralkopodobny</Authors>
+        <AssemblyName>ZlotaZawieszkaNaChujuCore</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
