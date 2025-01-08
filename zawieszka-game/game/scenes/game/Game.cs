@@ -1,19 +1,25 @@
+using System.Threading.Tasks.Dataflow;
 using Godot;
 
 namespace Zawieszka.scenes.game;
 
 public partial class Game : Control
 {
-	[Export] private VBoxContainer _playerInfoContainer;
-	
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-		_playerInfoContainer.AddChild(PlayerInfo.PlayerInfoFromName("Bob"));
-	}
+    private static readonly PackedScene GameScene = ResourceLoader.Load<PackedScene>("res://scenes/game/Game.tscn");
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
+    [Export] private VBoxContainer PlayerInfoContainer { get; set; } = null!;
+
+    public static Game FromPlayerNames(List<string> playerNames)
+    {
+        var game = GameScene.Instantiate<Game>();
+        playerNames.ForEach(playerName => game.PlayerInfoContainer.AddChild(PlayerInfo.FromName(playerName)));
+
+        return game;
+    }
+
+    public override void _Ready()
+    {
+        PlayerInfoContainer.AddChild(PlayerInfo.FromName("john"));
+        PlayerInfoContainer.AddChild(PlayerInfo.FromName("jane"));
+    }
 }
