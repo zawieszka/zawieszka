@@ -2,15 +2,15 @@
 
 public class World
 {
-    public List<Tile> Tiles { get; set; } = [];
+    public IReadOnlyList<Tile> Tiles { get; init; } = [];
 
     public World(List<Tile> tiles)
     {
         for (var i = 0; i < tiles.Count; i++)
         {
-            if (Tiles[i].Id != i)
+            if (tiles[i].Id != i)
             {
-                throw new ArgumentException($"Invalid tile list - pos({i}) != Id({Tiles[i].Id})");
+                throw new ArgumentException($"Invalid tile list - pos({i}) != Id({tiles[i].Id})");
             }
         }
 
@@ -33,7 +33,7 @@ public class World
         var legal = new LinkedList<int>();
         
         Helper(startingTile, moveStrength);
-        return legal;
+        return legal.Distinct();
 
         void Helper(int act, int remainingStrength)
         {
@@ -44,15 +44,24 @@ public class World
             }
             visited.Add(act);
             
-            foreach (var road in Tiles[act].Roads)
+            var next = Tiles[act].Roads.Where(road => !visited.Contains(road.DestinationId)).ToList();
+            if (next.Count != 0)
             {
-                if (visited.Contains(road.DestinationId))
+                foreach (var road in next)
                 {
-                    continue;
+                    if (visited.Contains(road.DestinationId))
+                    {
+                        continue;
+                    }
+                    Helper(road.DestinationId, remainingStrength - road.Weight);
+                    visited.Remove(road.DestinationId);
                 }
-                Helper(road.DestinationId, remainingStrength - road.Weight);
-                visited.Remove(road.DestinationId);
             }
+            else
+            {
+                legal.AddLast(act);
+            }
+            
         }
     }
 }
