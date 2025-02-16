@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{4DD0C805-1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZawieszkaCore", "core\ZawieszkaCore.csproj", "{0FEC4DE4-4551-446B-AB75-C8833957C26C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZawieszkaCoreTests", "ZawieszkaCoreTests\ZawieszkaCoreTests.csproj", "{FFBF07FF-8B56-4D18-B43A-9922CC7E9CBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZawieszkaCoreTests", "tests\ZawieszkaCoreTests.csproj", "{FFBF07FF-8B56-4D18-B43A-9922CC7E9CBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
