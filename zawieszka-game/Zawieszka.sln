@@ -8,6 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{4DD0C805-1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZawieszkaCore", "core\ZawieszkaCore.csproj", "{0FEC4DE4-4551-446B-AB75-C8833957C26C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZawieszkaCoreTests", "tests\ZawieszkaCoreTests.csproj", "{FFBF07FF-8B56-4D18-B43A-9922CC7E9CBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 	Debug|Any CPU = Debug|Any CPU
@@ -27,9 +29,16 @@ Global
 		{0FEC4DE4-4551-446B-AB75-C8833957C26C}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
 		{0FEC4DE4-4551-446B-AB75-C8833957C26C}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
 		{0FEC4DE4-4551-446B-AB75-C8833957C26C}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
+		{FFBF07FF-8B56-4D18-B43A-9922CC7E9CBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFBF07FF-8B56-4D18-B43A-9922CC7E9CBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFBF07FF-8B56-4D18-B43A-9922CC7E9CBC}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFBF07FF-8B56-4D18-B43A-9922CC7E9CBC}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{FFBF07FF-8B56-4D18-B43A-9922CC7E9CBC}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFBF07FF-8B56-4D18-B43A-9922CC7E9CBC}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5429E7CE-3660-4427-AB77-D70CF7BAC945} = {20335C33-C449-4AA4-B833-330F6C4E323B}
 		{0FEC4DE4-4551-446B-AB75-C8833957C26C} = {4DD0C805-1112-4694-88F2-89C6D6805D09}
+		{FFBF07FF-8B56-4D18-B43A-9922CC7E9CBC} = {4DD0C805-1112-4694-88F2-89C6D6805D09}
 	EndGlobalSection
 EndGlobal

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/menu/main/MainMenu.cs" id="1_nudfy"]
 
-[node name="MainMenu" type="MarginContainer" node_paths=PackedStringArray("HelloDisplay", "ClientButton")]
+[node name="MainMenu" type="MarginContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,8 +13,6 @@ theme_override_constants/margin_top = 80
 theme_override_constants/margin_right = 120
 theme_override_constants/margin_bottom = 80
 script = ExtResource("1_nudfy")
-HelloDisplay = NodePath("GridContainer/Label")
-ClientButton = NodePath("CenterContainer/VBoxContainer/VBoxContainer/ClientScene")
 
 [node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 2
