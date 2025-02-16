@@ -4,20 +4,26 @@ using Godot;
 
 public partial class ServerRpcConnection : Node, IRpcConnection
 {
-    public bool ServerRunning { get; private set; } = false;
+    private bool ServerRunning { get; set; }
     private Dictionary<int, string> RegisteredUsers { get; } = new();
-    
+
     [Signal]
     public delegate void PeerConnectedEventHandler(int peerId);
 
     [Signal]
     public delegate void PeerDisconnectedEventHandler(int peerId);
+
     [Signal]
     public delegate void ConnectionRegisteredEventHandler(int peerId, string username);
-    [Signal]
-    public delegate void EndTurnRequestedEventHandler(int peerId);
+
     [Signal]
     public delegate void TakeSeatRequestedEventHandler(int seat, int peerId, string username);
+
+    [Signal]
+    public delegate void EndTurnRequestedEventHandler(int peerId);
+
+    [Signal]
+    public delegate void StartGameRequestedEventHandler(int peerId);
 
     public override void _Ready()
     {
@@ -25,7 +31,9 @@ public partial class ServerRpcConnection : Node, IRpcConnection
         Multiplayer.PeerDisconnected += OnPeerDisconnected;
     }
 
-    public override void _Process(double delta) { }
+    public override void _Process(double delta)
+    {
+    }
 
     public void StartServer()
     {
@@ -54,6 +62,7 @@ public partial class ServerRpcConnection : Node, IRpcConnection
         {
             GD.PrintErr("PeerID was trimmed!!!");
         }
+
         GD.Print($"Peer {(int)id} connected");
         EmitSignal(SignalName.PeerConnected, (int)id);
     }
@@ -71,7 +80,7 @@ public partial class ServerRpcConnection : Node, IRpcConnection
         var peerId = Multiplayer.GetRemoteSenderId();
         RegisteredUsers[Multiplayer.GetRemoteSenderId()] = username;
         EmitSignal(SignalName.ConnectionRegistered, peerId, username);
-        
+
         Client_RegisteredConnection(peerId, username);
     }
 
@@ -93,6 +102,12 @@ public partial class ServerRpcConnection : Node, IRpcConnection
     public void Server_EndTurn()
     {
         EmitSignal(SignalName.EndTurnRequested, Multiplayer.GetRemoteSenderId());
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void Server_StartGame()
+    {
+        EmitSignal(SignalName.StartGameRequested, Multiplayer.GetRemoteSenderId());
     }
 
     [Rpc(MultiplayerApi.RpcMode.Disabled, CallLocal = false)]
@@ -128,5 +143,11 @@ public partial class ServerRpcConnection : Node, IRpcConnection
     public void Client_NextTurn(string username)
     {
         Rpc(MethodName.Client_NextTurn, username);
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.Disabled, CallLocal = false)]
+    public void Client_GameStarted()
+    {
+        Rpc(MethodName.Client_GameStarted);
     }
 }

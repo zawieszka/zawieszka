@@ -13,12 +13,15 @@ public partial class ClientRpcConnection : Node, IRpcConnection
     private ConnectionState State { get; set; } = ConnectionState.NotConnected;
 
     [Signal]
-    public delegate void ServerDisconnectedEventHandler();
-    [Signal]
     public delegate void ServerConnectedEventHandler(string username, bool isMe);
+    [Signal]
+    public delegate void ServerDisconnectedEventHandler();
 
     [Signal]
     public delegate void CustomMessageEventHandler(int peerId, string message);
+
+    [Signal]
+    public delegate void LobbyUpdatedEventHandler(string lobby);
 
     [Signal]
     public delegate void NewNotificationEventHandler(string message);
@@ -28,9 +31,9 @@ public partial class ClientRpcConnection : Node, IRpcConnection
 
     [Signal]
     public delegate void NextTurnEventHandler(string username);
-    
+
     [Signal]
-    public delegate void LobbyUpdatedEventHandler(string lobby);
+    public delegate void GameStartedEventHandler();
 
     public override void _Ready()
     {
@@ -106,6 +109,12 @@ public partial class ClientRpcConnection : Node, IRpcConnection
         RpcId(ServerId, MethodName.Server_EndTurn);
     }
 
+    [Rpc(MultiplayerApi.RpcMode.Disabled)]
+    public void Server_StartGame()
+    {
+        RpcId(ServerId, MethodName.Server_StartGame);
+    }
+
     [Rpc]
     public void Client_RegisteredConnection(int peerId, string username)
     {
@@ -142,6 +151,12 @@ public partial class ClientRpcConnection : Node, IRpcConnection
     public void Client_NextTurn(string username)
     {
         EmitSignal(SignalName.NextTurn, username);
+    }
+
+    [Rpc]
+    public void Client_GameStarted()
+    {
+        EmitSignal(SignalName.GameStarted);
     }
 
     private enum ConnectionState

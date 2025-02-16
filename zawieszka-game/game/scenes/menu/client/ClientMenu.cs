@@ -23,13 +23,7 @@ public partial class ClientMenu : Node
         LobbyPanel.Hide();
 
         Connection = GetNode<ClientRpcConnection>("/root/RpcConnection");
-        Connection.NewMessage += OnDisplayMessage;
-        Connection.NewNotification += OnNotifyMessage;
-        Connection.ServerDisconnected += () =>
-        {
-            LoadingPanel.Show();
-            LobbyPanel.Hide();
-        };
+
         Connection.ServerConnected += (username, isMe) =>
         {
             if (!isMe)
@@ -42,8 +36,15 @@ public partial class ClientMenu : Node
                 LoadingPanel.Hide();
             }
         };
-
+        Connection.ServerDisconnected += () =>
+        {
+            LoadingPanel.Show();
+            LobbyPanel.Hide();
+        };
         Connection.LobbyUpdated += OnUpdateLobby;
+        Connection.NewNotification += OnNotifyMessage;
+        Connection.NewMessage += OnDisplayMessage;
+        Connection.GameStarted += OnGameStarted;
 
         Seats.RequestTakeSeat += seat => Connection.Server_TakeSeat(seat);
 
@@ -57,13 +58,7 @@ public partial class ClientMenu : Node
 
     private void _on_start_game_button_up()
     {
-        var gameScene = new PackedScene();
-        // TODO handle packing error
-        // TODO use actual player names here
-        var packingError = gameScene.Pack(scenes.game.Game.FromPlayerNames(["Ania", "Adam", "Robert"]));
-        
-        GetTree().ChangeSceneToPacked(gameScene);
-        // Connection.Server_StartGame();
+        Connection.Server_StartGame();
     }
 
     private void OnUpdateLobby(string lobby)
@@ -77,13 +72,28 @@ public partial class ClientMenu : Node
         StartGameButton.Disabled = users.OfType<User>().Count() < 2;
     }
 
+    // ReSharper disable once MemberCanBeMadeStatic.Local
+    private void OnNotifyMessage(string message)
+    {
+        GD.Print(message);
+    }
+
     private void OnDisplayMessage(string message)
     {
         Log.Text += $"{message}\n";
     }
 
-    private void OnNotifyMessage(string message)
+    private void OnGameStarted()
     {
-        GD.Print(message);
+        var gameScene = new PackedScene();
+        // TODO use actual player names here
+        var packingError = gameScene.Pack(scenes.game.Game.FromPlayerNames(["Ania", "Adam", "Robert"]));
+        if (packingError != Error.Ok)
+        {
+            GD.PrintErr("Error packing game scene: " + packingError);
+            return;
+        }
+
+        GetTree().ChangeSceneToPacked(gameScene);
     }
 }
